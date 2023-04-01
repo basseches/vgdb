@@ -51,8 +51,9 @@ with engine.connect() as conn:
 		id serial,
 		name text
 	)
-	"""
+	""" #creates a table creation sql call and saves it to create_table_command var
 	res = conn.execute(text(create_table_command))
+        #then must execute the change 
 	insert_table_command = """INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace')"""
 	res = conn.execute(text(insert_table_command))
 	# you need to commit for create, insert, update queries to reflect
@@ -119,11 +120,11 @@ def index():
 	#
 	# example of a database query
 	#
-	select_query = "SELECT name from test"
+	select_query = "select distinct title, esrb_rating, popularity_rating from game order by popularity_rating desc limit 5"
 	cursor = g.conn.execute(text(select_query))
 	names = []
 	for result in cursor:
-		names.append(result[0])
+		names.append([result[0], result[1]])
 	cursor.close()
 
 	#

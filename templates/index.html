@@ -8,16 +8,23 @@
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+  <h1>Welcome to the Videogame Database</h1>
+  <p>Here are some of our top rated games</p> 
+ <!-- <div>{{data}}</div>
 
   <div>
+ -->
     {% for n in data %}
-    <div>{{n}}</div>
+    <div>{{n[0]}}</div>
+    <div>{{n[1]}}</div> 
     {% endfor %}
   </div>
 
 <p><a href="another">Go to the other page</a></p>
+<p><a href="query">Click here to find your next favorite game</a></p>
+<p><a href="addgame">Click here to add a game</a></p>
+<p><a href="addcompany">Click here to add a gaming company</a></p>
+
 
 <form method="POST" action="/add">
 <p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
