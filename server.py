@@ -174,6 +174,12 @@ def index():
 def another():
 	return render_template("another.html")
 
+@app.route('/addgame', methods=['GET'])
+def addgame():
+        return render_template("addgame.html")
+
+@app.route('/addgame', methods=['POST'])
+#code for when a game is submitted
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
