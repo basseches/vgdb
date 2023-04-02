@@ -175,11 +175,43 @@ def another():
 	return render_template("another.html")
 
 @app.route('/addgame', methods=['GET'])
-def addgame():
+def addgame_page():
         return render_template("addgame.html")
 
 @app.route('/addgame', methods=['POST'])
-#code for when a game is submitted
+def addgame():
+    title = request.form['title']
+    desc = request.form['desc']
+    popRate = request.form['popRate']
+    esrb = request.form['ESRB']
+    release_price = request.form['release_price']
+    current_price = request.form['current_price']
+    genre = request.form['genre']
+    franchise = request.form['franchise']
+    platform = request.form['platform']
+    dev_leader = request.form['dev_leader']
+    #developer = request.form['developer']
+    
+
+    params = {}
+    params["title"] = title
+    params["description"] = desc
+    params["popularity_rating"] = popRate
+    params["esrb_rating"] = esrb
+    params["release_price"] = release_price
+    params["current_price"] = current_price
+    #add game_mode here once I've figured out dropdown
+    params["genre"] = genre
+    params["franchise"] = franchise
+    params["platform"] = platform
+    params["dev_leader"] = dev_leader
+    #params["developer"] = developer
+    #params["publisher"] = publisher
+
+    #push the data to the database
+    ###########################################################
+    #g.conn.execute(text('INSERT INTO game(title,description,po
+
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])

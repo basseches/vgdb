@@ -12,31 +12,57 @@
 	<p style="text-align:center;">Here you can add your favorite games to the database! </p> 
 
 <div>
-<h2>Grouping Form Data with Fieldset</h2>
+<h2>Add a game of your choice</h2>
 
-<p>Input all the required information below to add your game to the database!</p>
+<p>To add a game the videogame it's developing and publishing company must also exist in the videogame database. <a href="addcompany">Click here to add a gaming company</a> Input all the required information below to add your game to the database!</p>
 
 <form method="POST" action="/addgame">
   <fieldset>
     <legend>Game Details:</legend>
+
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" value=""><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" id="lname" name="lname" value="Doe"><br><br>
+
+    <label for="popRate">Population Rating:</label><br>
+    <input type="number" id="popRate" name="popRate" value=""><br><br>
+
+    <label for="ESRB">ESRB Rating:</label><br>
+    <input type="text" id="ESRB" name="ESRB" value=""><br><br>
+
+    <label for="release_price">Release Price:</label><br>
+    <input type="number" id="release_price" name="release_price" value=""><br><br>
+
+    <label for="current_price">Current Price:</label><br>
+    <input type="number" id="current_price" name="current_price" value=""><br><br>
+
+    <label for="genre">Genre:</label><br>
+    <input type="text" id="genre" name="genre" value=""><br><br>
+
+    <label for="franchise">Franchise:</label><br>
+    <input type="text" id="franchise" name="franchise" value=""><br><br>
+
+    <label for="platform">Platform:</label><br>
+    <input type="text" id="platform" name="platform" value=""><br><br>
+
+    <label for="dev_leader">Development Leader:</label><br>
+    <input type="text" id="dev_leader" name="dev_leader" value=""><br><br>
+
+    <label for="developer">Developer:</label><br>
+    <input type="text" id="developer" name="publisher" value=""><br><br>
+
+    <label for="desc">Description:</label><br>
+    <input type="text" id="desc" name="desc" value=""><br><br>
+
+
     <input type="submit" value="Submit">
   </fieldset>
 </form>
 </div>
 
-<p><a href="another">Go to the other page</a></p>
+<p><a href=/>Back to homepage</a></p>
 <p><a href="query">Click here to find your next favorite game</a></p>
-<p><a href="addgame">Click here to add a game</a></p>
 <p><a href="addcompany">Click here to add a gaming company</a></p>
 
-
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
 
 </body>
 
