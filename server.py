@@ -120,7 +120,7 @@ def index():
 	#
 	# example of a database query
 	#
-	select_query = "select distinct title, esrb_rating, popularity_rating from game order by popularity_rating desc limit 5"
+	select_query = "select distinct title, popularity_rating from game order by popularity_rating desc limit 5"
 	cursor = g.conn.execute(text(select_query))
 	names = []
 	for result in cursor:
