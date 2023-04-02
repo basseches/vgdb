@@ -8,15 +8,14 @@
 
 
 <body>
-  <h1>Welcome to the Videogame Database</h1>
-  <p>Here are some of our top rated games</p> 
+	<h1 style="text-align:center;">Welcome to the Videogame Database</h1>
+	<p style="text-align:center;">Here are some of our top rated games</p> 
  <!-- <div>{{data}}</div>
 
   <div>
  -->
     {% for n in data %}
-    <div>{{n[0]}}</div>
-    <div>{{n[1]}}</div> 
+    <h4 style="text-align:center;">{{n[2]}} - {{n[0]}} - Player rating of {{n[1]}}/10</h2>
     {% endfor %}
   </div>
 

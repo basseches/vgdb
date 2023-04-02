@@ -120,11 +120,11 @@ def index():
 	#
 	# example of a database query
 	#
-	select_query = "select distinct title, popularity_rating from game order by popularity_rating desc limit 5"
+	select_query = " select s.title, s.popularity_rating, ROW_NUMBER() OVER (ORDER BY popularity_rating desc) from (select distinct title, popularity_rating from game) as s"
 	cursor = g.conn.execute(text(select_query))
 	names = []
 	for result in cursor:
-		names.append([result[0], result[1]])
+		names.append([result[0], result[1], result[2]])
 	cursor.close()
 
 	#
