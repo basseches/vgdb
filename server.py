@@ -390,6 +390,10 @@ def year():
     context = dict(data = names)
     return render_template("year.html", **context)
 
+@app.route('/query/game')
+def query_game():
+    return render_template("querygame.html")
+
 @app.route('/query/budget', methods=['POST'])
 def budget_post():
     # accessing form inputs from user
@@ -473,6 +477,27 @@ def year_post():
     context = dict(data = names)
 
     return render_template("results.html", **context)
+
+@app.route('/query/game', methods=['POST'])
+def game_post():
+    # accessing form inputs from user
+    name = '%' + request.form['name'].lower() + '%'
+
+    params = {}
+    params["name"] = name
+
+    query = "SELECT g.game_id, g.title, g.platform FROM game g " \
+            "WHERE LOWER(g.title) LIKE :name"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+    return render_template("querygame.html")
 
 #------------------------------------------------------------------------------
 
