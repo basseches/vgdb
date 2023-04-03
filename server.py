@@ -278,7 +278,7 @@ def platform():
     return render_template("queryplatform.html", **context)
 
 @app.route('/query/genre')
-def genre():
+def query_genre():
     genre_query = "SELECT title FROM genre"
     cursor = g.conn.execute(text(genre_query))
 
@@ -413,6 +413,38 @@ def game(game = None):
 
     context = dict(data = names)
     return render_template("game.html", **context)
+
+#------------------------------------------------------------------------------
+
+@app.route('/genre/<genre>')
+def genre(genre = None):
+    if genre == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["genre"] = genre
+    query = "SELECT g.title, g.description, n.num_games FROM genre g LEFT OUTER JOIN " \
+    "(SELECT genre.title, COUNT(*) AS num_games FROM game, genre " \
+    "WHERE game.genre = genre.title GROUP BY genre.title) AS n " \
+    "ON n.title = g.title WHERE g.title = :genre"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append([thing for thing in result])
+
+    genre_query = "SELECT game.game_id, game.title, game.platform FROM game, genre " \
+        "WHERE genre.title = :genre AND game.genre = genre.title"
+    cursor = g.conn.execute(text(genre_query), params)
+    games = []
+    for result in cursor:
+        games.append([thing for thing in result])
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names, games = games)
+    return render_template("genre.html", **context)
 
 @app.route('/login')
 def login():

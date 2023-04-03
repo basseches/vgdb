@@ -1,0 +1,32 @@
+{% extends "nav.html" %}
+
+{% block content %}
+
+<body>
+    <div class="cont2">
+        {% for n in data %}
+
+        <!-- Title -->
+        <h2>Genre: <i>{{n[0]}}</i></h2>
+        <div class="bigpadding"></div>
+
+        <h4>Description</h4>
+        <p>{{n[1]}}</p>
+
+        <h4>Number of games: {{n[2]}}</h4>
+        <div class="break"></div>
+        {% endfor %}
+        {% for n in games %}
+        <div class="row padding">
+            <a href="/game/{{n[0]}}">
+              <div class="qbutton">
+                <i>{{n[1]}}</i> for {{n[2]}}
+              </div>
+            </a>
+        </div>
+        <div class="break"></div>
+        {% endfor %}
+    </div>
+</body>
+
+{% endblock %}
