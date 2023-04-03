@@ -1,0 +1,51 @@
+{% extends "nav.html" %}
+
+{% block content %}
+
+<body>
+    <div class="cont2">
+        {% for n in data %}
+
+        <!-- Title -->
+        <h2><i>{{n[0]}}</i> for {{n[9]}}</h2>
+        <div class="bigpadding"></div>
+
+        <h4>Description</h4>
+        <p>{{n[1]}}</p>
+
+        <h4>Popularity rating</h4>
+        <p>{{n[2]}}</p>
+
+        <h4>ESRB rating</h4>
+        <p>{{n[3]}}</p>
+
+        <h4>Release price</h4>
+        <p>${{n[4]}}</p>
+
+        <h4>Current price</h4>
+        <p>${{n[5]}}</p>
+
+        <h4>Game mode</h4>
+        <p>{{n[6]}}</p>
+
+        <h4>Genre</h4>
+        <p>{{n[7]}}</p>
+
+        <h4>Franchise</h4>
+        <p>{{n[8]}}</p>
+
+        <h4>Developer</h4>
+        <p>{{n[11]}}</p>
+
+        <h4>Publisher</h4>
+        <p>{{n[12]}}</p>
+
+        <h4>Development leader</h4>
+        <p>{{n[10]}}</p>
+
+        <div class="break"></div>
+        {% endfor %}
+    </div>
+</body>
+
+{% endblock %}

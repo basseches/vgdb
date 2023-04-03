@@ -1,0 +1,21 @@
+{% extends "query.html" %}
+
+{% block content %}
+
+<body>
+    <div class="container">
+        <div class="row padding">
+            <h3>Results:</h3>
+        </div>
+        {% for n in data %}
+        <div class="break padding"></div>
+        <a href="/game/{{n[0]}}">
+            <div class="result">
+                <i>{{n[1]}}</i> for {{n[2]}}: ${{n[3]}}
+            </div>
+          </a>
+        {% endfor %}
+    </div>
+</body>
+
+{% endblock %}
