@@ -158,7 +158,6 @@ def addgame_page():
     franchise  = []
     for result in cursor:
         franchise.append([result[0]])
-    print(franchise)
     #platforms query
     platform_query = "select title from platform"
     cursor = g.conn.execute(text(platform_query))
@@ -622,7 +621,6 @@ def genre(genre = None):
 def platform(platform = None):
     if platform == None:
         return render_template("notfound.html")
-    print(platform)
 
     params = {}
     params["platform"] = platform 
@@ -631,21 +629,18 @@ def platform(platform = None):
     names = []
     for result in cursor:
         names.append([thing for thing in result])
-    print(names)
 
     games_query = "SELECT game_id, title, platform FROM game where platform = :platform"
     cursor = g.conn.execute(text(games_query), params)
     games = []
     for result in cursor:
         games.append([thing for thing in result])
-    print(games)
 
     count_query = "SELECT count(*) from (select game_id from game where platform = :platform) as f"
     cursor = g.conn.execute(text(count_query), params)
     count = []
     for result in cursor:
         count.append(result[0])
-    print(count)
 
     cursor.close()
 
