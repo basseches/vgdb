@@ -238,23 +238,56 @@ def addgame():
 #adding a company to the DB
 @app.route('/addcompany', methods=['GET'])
 def addcompany_page():
-    print("here")
     return render_template('addcompany.html')
 
 @app.route('/addcompany', methods=['POST'])
-def addcompany():
-    print("in here")
-    company_name = request.form['title']
+def addcompanyDB():
+    company_name = request.form['company']
     company_country = request.form['country']
 
     params = {}
     params["company"] = company_name
-    params["country"] = country
+    params["country"] = company_country
 
     g.conn.execute(text('INSERT INTO company(title,country) VALUES (:company,:country)'),params)
     g.conn.commit()
-    print("made it here too")
     return redirect('/addcompany')
+#adding a franchise
+@app.route('/addfranchise', methods=['GET'])
+def addfranchise_page():
+    return render_template('addfranchise.html')
+
+@app.route('/addfranchise', methods=['POST'])
+def addfranchise():
+    #completely add the new spinoff first
+    spinoff_name = request.form['spinoff_title']
+    spinoff_type = request.form['spinoff_type']
+    spinoff_year = request.form['release_year']
+    print("made it here")
+
+
+    params = {}
+    params["title"] = spinoff_name
+    params["type"] = spinoff_type
+    params["release_year"] = spinoff_year
+
+    g.conn.execute(text('INSERT INTO spinoff(title,type,release_year) VALUES (:title,:type,:release_year)'),params)
+    g.conn.commit()
+    print("made it here too")
+
+    #now handle franchise work
+    franchise = request.form['franchise']
+    spinoff = request.form['spinoff']
+
+    if franchise != "":
+        params = {}
+        params["franchise"] = franchise
+        params["spinoff"] = spinoff 
+
+        g.conn.execute(text('INSERT INTO franchise(title,spinoff) VALUES (:franchise,:spinoff)'),params)
+        g.conn.commit()
+    return redirect('/addfranchise')
+
 
 #------------------------------------------------------------------------------
 # QUERYING

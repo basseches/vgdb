@@ -1,0 +1,64 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+	<h1 style="text-align:center;">Welcome to the Videogame Database</h1>
+	<p style="text-align:center;">Here you can add your favorite game franchises and spinoffs to the database! </p> 
+
+<div>
+<h2>Add a franchise with it's accompanying spinoff.</h2>
+
+<p style="text-align:center;">Input the correct information below to add your favorite franchise to the database.For a franchise to be defined it must have atleast one spinoff, which may also be input below. Once you've submitted your franchise you can add games that are a part of that franchise to the database <a href="addgame">here</a>. </p>
+
+<form style="text-align:center;" method="POST" action="/addfranchise">
+  <fieldset>
+    <legend>Franchise Details:</legend>
+
+    <label for="franchise">Franchise Name:*</label><br>
+    <input type="text" id="franchise" name="franchise" value=""><br>
+
+    <label for="spinoff">Spinoff Name:</label><br>
+    <input type="text" id="spinoff" name="spinoff" value=""><br><br>
+  </fieldset>
+
+ <fieldset>
+    <legend>Spinoff Details:</legend>
+
+    <label for="spinoff_title">Spinoff Name:*</label><br>
+    <input type="text" id="spinoff_title" name="spinoff_title" value=""><br>
+
+    <label for="spinoff_type">Media Form:</label><br>
+    <select id="spinoff_type" name="spinoff_type">
+    <option value="Game">Videogame</option>
+    <option value="Movie">Movie</option>
+    <option value="Comic" >Comic</option>
+    <option value="Show">Show</option>
+    <option value="Book">Book</option>
+    </select><br>
+
+    <label for="release_year">Release Year:</label><br>
+    <input type="date" id="release_year" name="release_year" value=""><br><br>
+
+    <input type="submit" value="Submit">
+  </fieldset>
+
+</form>
+</div>
+
+
+
+<p><a href=/>Back to homepage</a></p>
+<p><a href="query">Click here to find your next favorite game</a></p>
+<p><a href="addcompany">Click here to add a gaming company</a></p>
+
+
+</body>
+
+
+</html>
