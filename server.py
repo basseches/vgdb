@@ -41,25 +41,6 @@ DATABASEURI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWRD}@{DATABASE_HO
 #
 engine = create_engine(DATABASEURI)
 
-#
-# Example of running queries in your database
-# Note that this will probably not work if you already have a table named 'test' in your database, containing meaningful data. This is only an example showing you how to run queries in your database using SQLAlchemy.
-#
-with engine.connect() as conn:
-	create_table_command = """
-	CREATE TABLE IF NOT EXISTS test (
-		id serial,
-		name text
-	)
-	""" #creates a table creation sql call and saves it to create_table_command var
-	res = conn.execute(text(create_table_command))
-        #then must execute the change 
-	insert_table_command = """INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace')"""
-	res = conn.execute(text(insert_table_command))
-	# you need to commit for create, insert, update queries to reflect
-	conn.commit()
-
-
 @app.before_request
 def before_request():
 	"""
@@ -112,19 +93,14 @@ def index():
 
 	See its API: https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data
 	"""
-
-	# DEBUG: this is debugging code to see what request looks like
-	print(request.args)
-
-
 	#
 	# example of a database query
 	#
-	select_query = " select s.title, s.popularity_rating, ROW_NUMBER() OVER (ORDER BY popularity_rating desc) from (select distinct title, popularity_rating from game) as s"
+	select_query = "select s.game_id, s.title, s.popularity_rating, ROW_NUMBER() OVER (ORDER BY popularity_rating desc) from (select distinct game_id, title, popularity_rating from game) as s LIMIT 3"
 	cursor = g.conn.execute(text(select_query))
 	names = []
 	for result in cursor:
-		names.append([result[0], result[1], result[2]])
+		names.append([result[1], result[2], result[3], result[0]])
 	cursor.close()
 
 	#
@@ -161,18 +137,6 @@ def index():
 	# for example, the below file reads template/index.html
 	#
 	return render_template("index.html", **context)
-
-#
-# This is an example of a different path.  You can see it at:
-# 
-#     localhost:8111/another
-#
-# Notice that the function name is another() rather than index()
-# The functions for each app.route need to have different names
-#
-@app.route('/another')
-def another():
-	return render_template("another.html")
 
 @app.route('/addgame', methods=['GET'])
 def addgame_page():
@@ -226,6 +190,68 @@ def add():
 	g.conn.commit()
 	return redirect('/')
 
+#------------------------------------------------------------------------------
+# QUERYING
+
+@app.route('/query')
+def query():
+	return render_template("query.html")
+
+@app.route('/query/budget')
+def budget():
+	# getting the minimum and maximum prices for our range sliders
+	query = "SELECT TO_CHAR(MIN(current_price), 'FM999999990'), TO_CHAR(MAX(current_price), 'FM999999990') FROM game"
+	cursor = g.conn.execute(text(query))
+	names = []
+	for result in cursor:
+		names.append([result[0], result[1]])
+	cursor.close()
+	context = dict(data = names)
+	return render_template("budget.html", **context)
+
+@app.route('/query/budget', methods=['POST'])
+def budget_post():
+	# accessing form inputs from user
+	min_price = request.form['min']
+	max_price = request.form['max']
+
+	params = {}
+	params["min_price"] = min_price
+	params["max_price"] = max_price
+
+	query = "SELECT g.game_id, g.title, g.platform, TO_CHAR(g.current_price, 'FM999999990.00') FROM game g WHERE current_price >= :min_price AND current_price <= :max_price ORDER BY current_price ASC"
+	cursor = g.conn.execute(text(query), params)
+
+	names = []
+	for result in cursor:
+		names.append([result[0], result[1], result[2], result[3]])
+	cursor.close()
+	context = dict(data = names)
+
+	return render_template("results.html", **context)
+
+#------------------------------------------------------------------------------
+
+@app.route('/game/<game>')
+def game(game = None):
+	if game == None:
+		return render_template("notfound.html")
+
+	params = {}
+	params["game"] = game
+	query = "SELECT g.title, g.description, g.popularity_rating, " \
+			"g.esrb_rating, TO_CHAR(g.release_price, 'FM999999990.00'), " \
+			"TO_CHAR(g.current_price, 'FM999999990.00'), g.game_mode, " \
+			"g.genre, g.franchise, g.platform, g.dev_leader, d.title, " \
+			"p.title FROM game g, company d, company p WHERE g.game_id = " \
+			":game AND g.developer = d.company_id AND g.publisher = p.company_id"
+	cursor = g.conn.execute(text(query), params)
+	names = []
+	for result in cursor:
+		names.append([thing for thing in result])
+	cursor.close()
+	context = dict(data = names)
+	return render_template("game.html", **context)
 
 @app.route('/login')
 def login():
