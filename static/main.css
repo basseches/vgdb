@@ -23,7 +23,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
 }
 
 .padding {
@@ -43,6 +42,15 @@ body {
     cursor: pointer;
 }
 
+.qbuttonwide{
+    width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    border-width: 0px;
+    background-color: rgb(241, 241, 241);
+    cursor: pointer;
+}
+
 .buttonblue{
     width: 200px;
     padding: 10px;
@@ -51,6 +59,17 @@ body {
     background-color: rgb(37, 11, 168);
     color: white;
     cursor: pointer;
+}
+
+.bluebox{
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
+    border-width: 0px;
+    background-color: rgb(231, 243, 255);
+    position: -webkit-sticky;
+    position: sticky;
+    top: 30px;
 }
 
 .result{

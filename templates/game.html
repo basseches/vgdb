@@ -14,7 +14,7 @@
         <p>{{n[1]}}</p>
 
         <h4>Popularity rating</h4>
-        <p>{{n[2]}}</p>
+        <p>{{n[2]}}/10</p>
 
         <h4>ESRB rating</h4>
         <p>{{n[3]}}</p>
@@ -35,10 +35,14 @@
         <p>{{n[8]}}</p>
 
         <h4>Developer</h4>
-        <p>{{n[11]}}</p>
+        {% for d in dev %}
+        <a href="/company/{{d[0]}}"><p>{{n[11]}}</p></a>
+        {% endfor %}
 
         <h4>Publisher</h4>
-        <p>{{n[12]}}</p>
+        {% for p in pub %}
+        <a href="/company/{{p[0]}}"><p>{{n[12]}}</p></a>
+        {% endfor %}
 
         <h4>Development leader</h4>
         <p>{{n[10]}}</p>

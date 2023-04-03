@@ -21,7 +21,7 @@ app = Flask(__name__, template_folder=tmpl_dir)
 #
 # The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
 #
-# XXX: The URI should be in the format of: 
+# XXX: The URI should be in the format of:
 #
 #     postgresql://USER:PASSWORD@34.73.36.248/project1
 #
@@ -44,7 +44,7 @@ engine = create_engine(DATABASEURI)
 @app.before_request
 def before_request():
     """
-    This function is run at the beginning of every web request 
+    This function is run at the beginning of every web request
     (every time you enter an address in the web browser).
     We use it to setup a database connection that can be used throughout the request.
 
@@ -78,7 +78,7 @@ def teardown_request(exception):
 #       @app.route("/foobar/", methods=["POST", "GET"])
 #
 # PROTIP: (the trailing / in the path is important)
-# 
+#
 # see for routing: https://flask.palletsprojects.com/en/1.1.x/quickstart/#routing
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
@@ -112,14 +112,14 @@ def index():
     # You can see an example template in templates/index.html
     #
     # context are the variables that are passed to the template.
-    # for example, "data" key in the context variable defined below will be 
+    # for example, "data" key in the context variable defined below will be
     # accessible as a variable in index.html:
     #
     #     # will print: [u'grace hopper', u'alan turing', u'ada lovelace']
     #     <div>{{data}}</div>
-    #     
+    #
     #     # creates a <div> tag for each element in data
-    #     # will print: 
+    #     # will print:
     #     #
     #     #   <div>grace hopper</div>
     #     #   <div>alan turing</div>
@@ -201,7 +201,7 @@ def addgame():
     game_mode = request.form['game_mode']
     franchise = request.form['franchise']
     franchise = request.form['franchise']
-    
+
 
     params = {}
     params["title"] = title
@@ -228,7 +228,7 @@ def addgame():
 #def add():
     # accessing form inputs from user
 #    name = request.form['name']
-    
+
     # passing params in for each variable into query
  #   params = {}
  #   params["new_name"] = name
@@ -282,7 +282,7 @@ def addfranchise():
     if franchise != "":
         params = {}
         params["franchise"] = franchise
-        params["spinoff"] = spinoff 
+        params["spinoff"] = spinoff
 
         g.conn.execute(text('INSERT INTO franchise(title,spinoff) VALUES (:franchise,:spinoff)'),params)
         g.conn.commit()
@@ -298,21 +298,53 @@ def query():
 
 @app.route('/games')
 def games():
-    query = "SELECT game_id, title, platform FROM game"
+    query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating DESC"
+    prefix = "Rating of "
+    suffix = "/10"
     cursor = g.conn.execute(text(query))
 
     names = []
     for result in cursor:
-        names.append([result[0], result[1], result[2]])
+        names.append([result[0], result[1], result[2], result[3]])
     cursor.close()
-    context = dict(data = names)
-    return render_template("results.html", **context)
+    context = dict(data = names, prefix = prefix, suffix = suffix)
+    return render_template("games.html", **context)
+
+@app.route('/games', methods=['POST'])
+def games_post():
+    query = ""
+    prefix = ""
+    suffix = ""
+    button = int(request.form['sort'])
+
+    if button == 1:
+        query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating DESC"
+        prefix = "Rating of "
+        suffix = "/10"
+    elif button == 2:
+        query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating ASC"
+        prefix = "Rating of "
+        suffix = "/10"
+    elif button == 3:
+        query = "SELECT game_id, title, platform, TO_CHAR(current_price, '$FM999999990.00') FROM game ORDER BY current_price DESC"
+        prefix = "Current price: "
+    elif button == 4:
+        query = "SELECT game_id, title, platform, TO_CHAR(current_price, '$FM999999990.00') FROM game ORDER BY current_price ASC"
+        prefix = "Current price: "
+    cursor = g.conn.execute(text(query))
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], result[3]])
+    cursor.close()
+    context = dict(data = names, prefix = prefix, suffix = suffix)
+    return render_template("games.html", **context)
 
 @app.route('/query/budget')
 def budget():
     # getting the minimum and maximum prices for our range sliders
     query = "SELECT TO_CHAR(MIN(current_price), 'FM999999990'), " \
-        "TO_CHAR(MAX(current_price), 'FM999999990') FROM game"
+            "TO_CHAR(MAX(current_price), 'FM999999990') FROM game"
     cursor = g.conn.execute(text(query))
     names = []
     for result in cursor:
@@ -349,7 +381,7 @@ def query_genre():
 def year():
     # getting the minimum and maximum release years for our range sliders
     query = "SELECT TO_CHAR(MIN(EXTRACT('Year' FROM release_date)), 'FM999999990'), " \
-        "TO_CHAR(MAX(EXTRACT('Year' FROM release_date)), 'FM999999990') FROM release_date"
+            "TO_CHAR(MAX(EXTRACT('Year' FROM release_date)), 'FM999999990') FROM release_date"
     cursor = g.conn.execute(text(query))
     names = []
     for result in cursor:
@@ -369,9 +401,9 @@ def budget_post():
     params["max_price"] = max_price
 
     query = "SELECT g.game_id, g.title, g.platform, " \
-        "TO_CHAR(g.current_price, '$FM999999990.00') FROM game g " \
-        "WHERE current_price >= :min_price AND current_price <= :max_price " \
-        "ORDER BY current_price ASC"
+            "TO_CHAR(g.current_price, '$FM999999990.00') FROM game g " \
+            "WHERE current_price >= :min_price AND current_price <= :max_price " \
+            "ORDER BY current_price ASC"
     cursor = g.conn.execute(text(query), params)
 
     names = []
@@ -389,7 +421,7 @@ def platform_post():
     params["platform"] = request.form['platform']
 
     query = "SELECT g.game_id, g.title, g.platform FROM game g " \
-        "WHERE g.platform = :platform"
+            "WHERE g.platform = :platform"
     cursor = g.conn.execute(text(query), params)
 
     names = []
@@ -407,7 +439,7 @@ def genre_post():
     params["genre"] = request.form['genre']
 
     query = "SELECT g.game_id, g.title, g.platform, g.genre FROM game g " \
-        "WHERE g.genre = :genre"
+            "WHERE g.genre = :genre"
     cursor = g.conn.execute(text(query), params)
 
     names = []
@@ -429,9 +461,9 @@ def year_post():
     params["max_yr"] = max_yr
 
     query = "SELECT g.game_id, g.title, g.platform, " \
-        "TO_CHAR(EXTRACT('Year' FROM release_date), 'FM999999990') AS release_year FROM game g NATURAL JOIN release_date r " \
-        "WHERE EXTRACT('Year' FROM release_date) >= :min_yr AND EXTRACT('Year' FROM release_date) <= :max_yr " \
-        "ORDER BY release_year DESC"
+            "TO_CHAR(EXTRACT('Year' FROM release_date), 'FM999999990') AS release_year FROM game g NATURAL JOIN release_date r " \
+            "WHERE EXTRACT('Year' FROM release_date) >= :min_yr AND EXTRACT('Year' FROM release_date) <= :max_yr " \
+            "ORDER BY release_year DESC"
     cursor = g.conn.execute(text(query), params)
 
     names = []
@@ -453,21 +485,37 @@ def game(game = None):
     params["game"] = game
     query = "SELECT g.title, g.description, g.popularity_rating, " \
             "g.esrb_rating, TO_CHAR(g.release_price, 'FM999999990.00'), " \
-            "TO_CHAR(g.current_price, 'FM999999990.00'), g.game_mode, " \
+            "TO_CHAR(g.current_price, 'FM999999990.00'), gm.game_mode, " \
             "g.genre, g.franchise, g.platform, g.dev_leader, d.title, " \
-            "p.title FROM (game g LEFT OUTER JOIN company d ON " \
+            "p.title FROM ((game g LEFT OUTER JOIN company d ON " \
             "g.developer = d.company_id) LEFT OUTER JOIN company p ON " \
-            "g.publisher = p.company_id WHERE g.game_id = :game"
+            "g.publisher = p.company_id) LEFT OUTER JOIN game_mode gm ON " \
+            "g.game_mode = gm.game_mode_id WHERE g.game_id = :game"
     cursor = g.conn.execute(text(query), params)
     names = []
     for result in cursor:
         names.append([thing for thing in result])
+
+    query = "SELECT d.company_id FROM game g, company d " \
+            "WHERE g.game_id = :game AND g.developer = d.company_id"
+    cursor = g.conn.execute(text(query), params)
+    developer = []
+    for result in cursor:
+        developer.append([thing for thing in result])
+
+    query = "SELECT p.company_id FROM game g, company p " \
+            "WHERE g.game_id = :game AND g.publisher = p.company_id"
+    cursor = g.conn.execute(text(query), params)
+    publisher = []
+    for result in cursor:
+        publisher.append([thing for thing in result])
+
     cursor.close()
 
     if not names:
         return render_template("notfound.html")
 
-    context = dict(data = names)
+    context = dict(data = names, dev = developer, pub = publisher)
     return render_template("game.html", **context)
 
 #------------------------------------------------------------------------------
@@ -480,16 +528,16 @@ def genre(genre = None):
     params = {}
     params["genre"] = genre
     query = "SELECT g.title, g.description, n.num_games FROM genre g LEFT OUTER JOIN " \
-    "(SELECT genre.title, COUNT(*) AS num_games FROM game, genre " \
-    "WHERE game.genre = genre.title GROUP BY genre.title) AS n " \
-    "ON n.title = g.title WHERE g.title = :genre"
+            "(SELECT genre.title, COUNT(*) AS num_games FROM game, genre " \
+            "WHERE game.genre = genre.title GROUP BY genre.title) AS n " \
+            "ON n.title = g.title WHERE g.title = :genre"
     cursor = g.conn.execute(text(query), params)
     names = []
     for result in cursor:
         names.append([thing for thing in result])
 
     genre_query = "SELECT game.game_id, game.title, game.platform FROM game, genre " \
-        "WHERE genre.title = :genre AND game.genre = genre.title"
+            "WHERE genre.title = :genre AND game.genre = genre.title"
     cursor = g.conn.execute(text(genre_query), params)
     games = []
     for result in cursor:
@@ -518,7 +566,7 @@ def company(company = None):
         names.append([thing for thing in result])
 
     dev_query = "SELECT game.game_id, game.title, game.platform FROM game, company " \
-        "WHERE company.company_id = :company AND game.developer = company.company_id"
+            "WHERE company.company_id = :company AND game.developer = company.company_id"
     cursor = g.conn.execute(text(dev_query), params)
     devs = []
     for result in cursor:
@@ -526,7 +574,7 @@ def company(company = None):
     cursor.close()
 
     pub_query = "SELECT game.game_id, game.title, game.platform FROM game, company " \
-        "WHERE company.company_id = :company AND game.publisher = company.company_id"
+            "WHERE company.company_id = :company AND game.publisher = company.company_id"
     cursor = g.conn.execute(text(pub_query), params)
     pubs = []
     for result in cursor:
