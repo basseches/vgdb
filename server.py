@@ -158,7 +158,6 @@ def addgame_page():
     franchise  = []
     for result in cursor:
         franchise.append([result[0]])
-    print(franchise)
     #platforms query
     platform_query = "select title from platform"
     cursor = g.conn.execute(text(platform_query))
@@ -495,7 +494,51 @@ def game_post():
     context = dict(data = names)
 
     return render_template("results.html", **context)
-    return render_template("querygame.html")
+
+@app.route('/query/all/<search>', methods=['GET', 'POST'])
+def all_post(search=None):
+    search = '%' + search.lower() + '%'
+
+    params = {}
+    params["search"] = search
+
+    query = "SELECT g.game_id, g.title, g.platform FROM game g " \
+            "WHERE LOWER(g.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    games = []
+    for result in cursor:
+        games.append([result[0], result[1], result[2]])
+
+    query = "SELECT g.title FROM genre g " \
+            "WHERE LOWER(g.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    genres = []
+    for result in cursor:
+        genres.append([result[0]])
+
+    query = "SELECT c.company_id, c.title FROM company c " \
+            "WHERE LOWER(c.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    companies = []
+    for result in cursor:
+        companies.append([result[0], result[1]])
+
+    query = "SELECT p.title FROM platform p " \
+            "WHERE LOWER(p.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    platforms = []
+    for result in cursor:
+        platforms.append([result[0]])
+
+    cursor.close()
+    context = dict(games = games, genres = genres, companies = companies,
+                        platforms = platforms)
+
+    return render_template("allresults.html", **context)
 
 #------------------------------------------------------------------------------
 
@@ -578,7 +621,6 @@ def genre(genre = None):
 def platform(platform = None):
     if platform == None:
         return render_template("notfound.html")
-    print(platform)
 
     params = {}
     params["platform"] = platform 
@@ -587,21 +629,18 @@ def platform(platform = None):
     names = []
     for result in cursor:
         names.append([thing for thing in result])
-    print(names)
 
     games_query = "SELECT game_id, title, platform FROM game where platform = :platform"
     cursor = g.conn.execute(text(games_query), params)
     games = []
     for result in cursor:
         games.append([thing for thing in result])
-    print(games)
 
     count_query = "SELECT count(*) from (select game_id from game where platform = :platform) as f"
     cursor = g.conn.execute(text(count_query), params)
     count = []
     for result in cursor:
         count.append(result[0])
-    print(count)
 
     cursor.close()
 
