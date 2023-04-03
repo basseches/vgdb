@@ -243,7 +243,8 @@ def query():
 @app.route('/query/budget')
 def budget():
 	# getting the minimum and maximum prices for our range sliders
-	query = "SELECT TO_CHAR(MIN(current_price), 'FM999999990'), TO_CHAR(MAX(current_price), 'FM999999990') FROM game"
+	query = "SELECT TO_CHAR(MIN(current_price), 'FM999999990'), " \
+		"TO_CHAR(MAX(current_price), 'FM999999990') FROM game"
 	cursor = g.conn.execute(text(query))
 	names = []
 	for result in cursor:
@@ -262,7 +263,10 @@ def budget_post():
 	params["min_price"] = min_price
 	params["max_price"] = max_price
 
-	query = "SELECT g.game_id, g.title, g.platform, TO_CHAR(g.current_price, 'FM999999990.00') FROM game g WHERE current_price >= :min_price AND current_price <= :max_price ORDER BY current_price ASC"
+	query = "SELECT g.game_id, g.title, g.platform, " \
+		"TO_CHAR(g.current_price, 'FM999999990.00') FROM game g " \
+		"WHERE current_price >= :min_price AND current_price <= :max_price " \
+		"ORDER BY current_price ASC"
 	cursor = g.conn.execute(text(query), params)
 
 	names = []
@@ -286,8 +290,9 @@ def game(game = None):
 			"g.esrb_rating, TO_CHAR(g.release_price, 'FM999999990.00'), " \
 			"TO_CHAR(g.current_price, 'FM999999990.00'), g.game_mode, " \
 			"g.genre, g.franchise, g.platform, g.dev_leader, d.title, " \
-			"p.title FROM game g, company d, company p WHERE g.game_id = " \
-			":game AND g.developer = d.company_id AND g.publisher = p.company_id"
+			"p.title FROM (game g LEFT OUTER JOIN company d ON " \
+			"g.developer = d.company_id) LEFT OUTER JOIN company p ON " \
+			"g.publisher = p.company_id WHERE g.game_id = :game"
 	cursor = g.conn.execute(text(query), params)
 	names = []
 	for result in cursor:
