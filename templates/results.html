@@ -11,9 +11,13 @@
         <div class="break padding"></div>
         <a href="/game/{{n[0]}}">
             <div class="result">
-                <i>{{n[1]}}</i> for {{n[2]}}: ${{n[3]}}
+                {% if n[3] == null or n[3] == "" %}
+                    <i>{{n[1]}}</i> for {{n[2]}}
+                {% else %}
+                    <i>{{n[1]}}</i> for {{n[2]}}: ${{n[3]}}
+                {% endif %}
             </div>
-          </a>
+        </a>
         {% endfor %}
     </div>
 </body>
