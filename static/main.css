@@ -43,6 +43,16 @@ body {
     cursor: pointer;
 }
 
+.buttonblue{
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    border-width: 0px;
+    background-color: rgb(37, 11, 168);
+    color: white;
+    cursor: pointer;
+}
+
 .result{
     width: 400;
     padding: 10px;
@@ -98,4 +108,12 @@ body {
     margin: auto;
     width: 600px;
 
+}
+
+a {
+    color: black;
+}
+
+.whitetext {
+    color: white;
 }

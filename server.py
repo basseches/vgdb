@@ -240,6 +240,18 @@ def add():
 def query():
     return render_template("query.html")
 
+@app.route('/games')
+def games():
+    query = "SELECT game_id, title, platform FROM game"
+    cursor = g.conn.execute(text(query))
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2]])
+    cursor.close()
+    context = dict(data = names)
+    return render_template("results.html", **context)
+
 @app.route('/query/budget')
 def budget():
     # getting the minimum and maximum prices for our range sliders
@@ -265,6 +277,31 @@ def platform():
     context = dict(data = platform)
     return render_template("queryplatform.html", **context)
 
+@app.route('/query/genre')
+def genre():
+    genre_query = "SELECT title FROM genre"
+    cursor = g.conn.execute(text(genre_query))
+
+    genre = []
+    for result in cursor:
+        genre.append(result[0])
+    cursor.close()
+    context = dict(data = genre)
+    return render_template("querygenre.html", **context)
+
+@app.route('/query/year')
+def year():
+    # getting the minimum and maximum release years for our range sliders
+    query = "SELECT TO_CHAR(MIN(EXTRACT('Year' FROM release_date)), 'FM999999990'), " \
+        "TO_CHAR(MAX(EXTRACT('Year' FROM release_date)), 'FM999999990') FROM release_date"
+    cursor = g.conn.execute(text(query))
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1]])
+    cursor.close()
+    context = dict(data = names)
+    return render_template("year.html", **context)
+
 @app.route('/query/budget', methods=['POST'])
 def budget_post():
     # accessing form inputs from user
@@ -276,7 +313,7 @@ def budget_post():
     params["max_price"] = max_price
 
     query = "SELECT g.game_id, g.title, g.platform, " \
-        "TO_CHAR(g.current_price, 'FM999999990.00') FROM game g " \
+        "TO_CHAR(g.current_price, '$FM999999990.00') FROM game g " \
         "WHERE current_price >= :min_price AND current_price <= :max_price " \
         "ORDER BY current_price ASC"
     cursor = g.conn.execute(text(query), params)
@@ -302,6 +339,48 @@ def platform_post():
     names = []
     for result in cursor:
         names.append([result[0], result[1], result[2]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+
+@app.route('/query/genre', methods=['POST'])
+def genre_post():
+    # accessing form inputs from user
+    params = {}
+    params["genre"] = request.form['genre']
+
+    query = "SELECT g.game_id, g.title, g.platform, g.genre FROM game g " \
+        "WHERE g.genre = :genre"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], result[3]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+
+@app.route('/query/year', methods=['POST'])
+def year_post():
+    # accessing form inputs from user
+    min_yr = request.form['min']
+    max_yr = request.form['max']
+
+    params = {}
+    params["min_yr"] = min_yr
+    params["max_yr"] = max_yr
+
+    query = "SELECT g.game_id, g.title, g.platform, " \
+        "TO_CHAR(EXTRACT('Year' FROM release_date), 'FM999999990') AS release_year FROM game g NATURAL JOIN release_date r " \
+        "WHERE EXTRACT('Year' FROM release_date) >= :min_yr AND EXTRACT('Year' FROM release_date) <= :max_yr " \
+        "ORDER BY release_year DESC"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], result[3]])
     cursor.close()
     context = dict(data = names)
 

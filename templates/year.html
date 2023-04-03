@@ -1,0 +1,22 @@
+{% extends "query.html" %}
+
+{% block query %}
+
+<div class="row bigpadding">
+    <h3>You're searching by release year.</h3>
+</div>
+{% for n in data %}
+<div class="break padding"></div>
+<div class="slider">
+    <form method="post">
+        <label for="min">Minimum release year:</label><br>
+        <input type="range" name="min" min={{n[0]}} max={{n[1]}} value={{n[0]}} oninput="rangeValue.innerText = this.value" step=1>
+        <p id="rangeValue">{{n[0]}}</p>
+        <label for="min">Maximum release year:</label><br>
+        <input type="range" name="max" min={{n[0]}} max={{n[1]}} value={{n[1]}} oninput="rangeValue2.innerText = this.value" step=1>
+        <p id="rangeValue2">{{n[1]}}</p>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+{% endfor %}
+{% endblock %}
