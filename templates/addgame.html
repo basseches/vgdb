@@ -14,13 +14,13 @@
 <div>
 <h2>Add a game of your choice</h2>
 
-<p>To add a game the videogame it's developing and publishing company must also exist in the videogame database. <a href="addcompany">Click here to add a gaming company</a> Input all the required information below to add your game to the database!</p>
+<p style="text-align:center;">To add a game the videogame to the database, the game's developing and publishing companies must already be in the database. The game's genre and platform must also already exist in the database. You can then select the appropriate option from the drop down menu, or for the non-required fields, leave it blank. If you'd like to add a company before adding a game click <a href="addcompany">here</a>. To add a franchise click <a href="addfranchise">here</a> and to add a development leader click <a href="addlead">here</a>. Input all the required information below to add your game to the database!</p>
 
-<form method="POST" action="/addgame">
+<form style="text-align:center;" method="POST" action="/addgame">
   <fieldset>
     <legend>Game Details:</legend>
 
-    <label for="title">Title:</label><br>
+    <label for="title">Title:*</label><br>
     <input type="text" id="title" name="title" value=""><br>
 
     <label for="popRate">Population Rating:</label><br>
@@ -29,7 +29,7 @@
     <label for="ESRB">ESRB Rating:</label><br>
     <input type="text" id="ESRB" name="ESRB" value=""><br><br>
 
-    <label for="release_price">Release Price:</label><br>
+    <label for="release_price">Release Price:*</label><br>
     <input type="number" id="release_price" name="release_price" value=""><br><br>
 
     <label for="current_price">Current Price:</label><br>
@@ -38,34 +38,34 @@
     <label for="game_mode">Game Mode:</label><br>
     <select id="game_mode" name="game_mode">
 	    {%for n in modes %}
-	    <option value={{n[0]}}>{{n[1]}}</option>
+	    <option value="{{n[0]}}">{{n[1]}}</option>
 	    {% endfor %}
     </select><br><br>
-    <label for="genre">Genre:</label><br>
+    <label for="genre">Genre:*</label><br>
     <select id="genre" name="genre">
 	    {% for n in genres %}
-	    <option value={{n}}>{{n}}</option>
+	    <option value="{{n}}">{{n}}</option>
 	    {% endfor %}
     </select><br><br>
 
     <label for="franchise">Franchise:</label><br>
     <select id="franchise" name="franchise">
 	    {% for n in franchises %}
-	    <option value={{n}}>{{n}}</option>
+	    <option value="{{n[0]}}">{{n[0]}}</option>
 	    {% endfor %}
     </select><br><br>
 
-    <label for="platform">Platform:</label><br>
+    <label for="platform">Platform:*</label><br>
     <select id="platform" name="platform">
 	    {%for n in platforms %}
-	    <option value={{n}}>{{n}}</option>
+	    <option value="{{n}}">{{n}}</option>
 	    {% endfor %}
     </select><br><br>
 
     <label for="dev_leader">Development Leader:</label><br>
     <select id="dev_leader" name="dev_leader">
 	    {%for n in dev_leaders %}
-	    <option value={{n}}>{{n}}</option>
+	    <option value="{{n}}">{{n}}</option>
 	    {% endfor %}
     </select><br><br>
 
@@ -79,7 +79,7 @@
     <label for="publisher">Publisher:</label><br>
     <select id="publisher" name="publisher">
 	    {% for n in companies %}
-	    <option value={{n[0]}}>{{n[1]}}</option>
+	    <option value="{{n[0]}}">{{n[1]}}</option>
 	    {% endfor %}
     </select><br><br>
 

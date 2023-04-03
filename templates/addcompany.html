@@ -1,0 +1,42 @@
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+	<h1 style="text-align:center;">Welcome to the Videogame Database</h1>
+	<p style="text-align:center;">Here you can add your favorite gaming companies to the database! </p> 
+
+<div>
+<h2>Add your company of choice</h2>
+
+<p style="text-align:center;">Input the correct information below to add your favorite company to the database. Once you've submitted your company you can add games that company has made to the database <a href="addgame">here</a>. </p>
+
+<form style="text-align:center;" method="POST" action="/addcompany">
+  <fieldset>
+    <legend>Company Details:</legend>
+
+    <label for="company">Company Name:*</label><br>
+    <input type="text" id="company" name="company" value=""><br>
+
+    <label for="country">Country:</label><br>
+    <input type="text" id="country" name="country" value=""><br><br>
+
+    <input type="submit" value="Submit">
+  </fieldset>
+</form>
+</div>
+
+<p><a href=/>Back to homepage</a></p>
+<p><a href="query">Click here to find your next favorite game</a></p>
+<p><a href="addcompany">Click here to add a gaming company</a></p>
+
+
+</body>
+
+
+</html>

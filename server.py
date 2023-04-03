@@ -141,7 +141,7 @@ def index():
 @app.route('/addgame', methods=['GET'])
 def addgame_page():
     #pull in the correct data needed for the dropdown menus
-    mode_query = "select * from game_mode"
+    mode_query = "select * from game_mode order by game_mode_id desc"
     cursor = g.conn.execute(text(mode_query))
     mode = []
     for result in cursor:
@@ -153,11 +153,12 @@ def addgame_page():
     for result in cursor:
         genre.append(result[0])
     #franchise query
-    franchise_query = "select title from franchise"
+    franchise_query = "select title from franchise order by title asc"
     cursor = g.conn.execute(text(franchise_query))
     franchise  = []
     for result in cursor:
-        franchise.append(result[0])
+        franchise.append([result[0]])
+    print(franchise)
     #platforms query
     platform_query = "select title from platform"
     cursor = g.conn.execute(text(platform_query))
@@ -166,13 +167,13 @@ def addgame_page():
         platform.append(result[0])
 
     #dev_leaders query
-    devlead_query = "select title from development_leader"
+    devlead_query = "select title from development_leader order by title asc"
     cursor = g.conn.execute(text(devlead_query))
     devlead  = []
     for result in cursor:
         devlead.append(result[0])
     #companies query
-    company_query = "select company_id, title from company"
+    company_query = "select company_id, title from company order by company_id desc"
     cursor = g.conn.execute(text(company_query))
     company = []
     for result in cursor:
@@ -198,6 +199,8 @@ def addgame():
     developer = request.form['developer']
     publisher = request.form['publisher']
     game_mode = request.form['game_mode']
+    franchise = request.form['franchise']
+    franchise = request.form['franchise']
     
 
     params = {}
@@ -220,18 +223,38 @@ def addgame():
     g.conn.commit();
     return redirect('/addgame')
 
-# Example of adding new data to the database
-@app.route('/add', methods=['POST'])
-def add():
+#
+#@app.route('/add', methods=['POST'])
+#def add():
     # accessing form inputs from user
-    name = request.form['name']
+#    name = request.form['name']
     
     # passing params in for each variable into query
+ #   params = {}
+ #   params["new_name"] = name
+ #   g.conn.execute(text('INSERT INTO test(name) VALUES (:new_name)'), params)
+ #   g.conn.commit()
+ #   return redirect('/')
+#adding a company to the DB
+@app.route('/addcompany', methods=['GET'])
+def addcompany_page():
+    print("here")
+    return render_template('addcompany.html')
+
+@app.route('/addcompany', methods=['POST'])
+def addcompany():
+    print("in here")
+    company_name = request.form['title']
+    company_country = request.form['country']
+
     params = {}
-    params["new_name"] = name
-    g.conn.execute(text('INSERT INTO test(name) VALUES (:new_name)'), params)
+    params["company"] = company_name
+    params["country"] = country
+
+    g.conn.execute(text('INSERT INTO company(title,country) VALUES (:company,:country)'),params)
     g.conn.commit()
-    return redirect('/')
+    print("made it here too")
+    return redirect('/addcompany')
 
 #------------------------------------------------------------------------------
 # QUERYING
