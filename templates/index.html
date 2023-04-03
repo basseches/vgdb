@@ -1,35 +1,27 @@
-<html>
-  <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
-  </style>
+{% extends "nav.html" %}
 
+{% block content %}
 
-<body>
-	<h1 style="text-align:center;">Welcome to the Videogame Database</h1>
-	<p style="text-align:center;">Here are some of our top rated games</p> 
- <!-- <div>{{data}}</div>
+<div class="container">
+  <p style="text-align:center;">Check out some of our top rated games:</p> 
+  <div class="break"></div>
+  {% for n in data %}
+    <div class="row padding">
+      <a href="/game/{{n[3]}}">
+        <div class="qbutton">
+          {{n[2]}} - <i>{{n[0]}}</i>
+          <br>Player rating of {{n[1]}}/10
+        </div>
+      </a>
+    </div>
+  <div class="break"></div>
+  {% endfor %}
+  <div class="padding break"></div>
+  <p><a href="query">Click here to find your next favorite game</a></p>
+  <div class="break"></div>
+  <p><a href="addgame">Click here to add a game</a></p>
+  <div class="break"></div>
+  <p><a href="addcompany">Click here to add a gaming company</a></p>
+</div>
 
-  <div>
- -->
-    {% for n in data %}
-    <h4 style="text-align:center;">{{n[2]}} - {{n[0]}} - Player rating of {{n[1]}}/10</h2>
-    {% endfor %}
-  </div>
-
-<p><a href="another">Go to the other page</a></p>
-<p><a href="query">Click here to find your next favorite game</a></p>
-<p><a href="addgame">Click here to add a game</a></p>
-<p><a href="addcompany">Click here to add a gaming company</a></p>
-
-
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
-
-</body>
-
-
-</html>
+{% endblock %}
