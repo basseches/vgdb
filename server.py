@@ -266,7 +266,7 @@ def budget():
     return render_template("budget.html", **context)
 
 @app.route('/query/platform')
-def platform():
+def query_platform():
     platform_query = "SELECT title FROM platform"
     cursor = g.conn.execute(text(platform_query))
 
@@ -445,6 +445,43 @@ def genre(genre = None):
 
     context = dict(data = names, games = games)
     return render_template("genre.html", **context)
+
+#------------------------------------------------------------------------------
+
+@app.route('/company/<company>')
+def company(company = None):
+    if company == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["company"] = company
+    query = "SELECT title, country FROM company WHERE company_id = :company"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append([thing for thing in result])
+
+    dev_query = "SELECT game.game_id, game.title, game.platform FROM game, company " \
+        "WHERE company.company_id = :company AND game.developer = company.company_id"
+    cursor = g.conn.execute(text(dev_query), params)
+    devs = []
+    for result in cursor:
+        devs.append([thing for thing in result])
+    cursor.close()
+
+    pub_query = "SELECT game.game_id, game.title, game.platform FROM game, company " \
+        "WHERE company.company_id = :company AND game.publisher = company.company_id"
+    cursor = g.conn.execute(text(pub_query), params)
+    pubs = []
+    for result in cursor:
+        pubs.append([thing for thing in result])
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names, devs = devs, pubs = pubs)
+    return render_template("company.html", **context)
 
 @app.route('/login')
 def login():
