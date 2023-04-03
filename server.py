@@ -263,7 +263,6 @@ def addfranchise():
     spinoff_name = request.form['spinoff_title']
     spinoff_type = request.form['spinoff_type']
     spinoff_year = request.form['release_year']
-    print("made it here")
 
 
     params = {}
@@ -273,7 +272,6 @@ def addfranchise():
 
     g.conn.execute(text('INSERT INTO spinoff(title,type,release_year) VALUES (:title,:type,:release_year)'),params)
     g.conn.commit()
-    print("made it here too")
 
     #now handle franchise work
     franchise = request.form['franchise']
