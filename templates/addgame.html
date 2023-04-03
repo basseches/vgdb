@@ -35,24 +35,56 @@
     <label for="current_price">Current Price:</label><br>
     <input type="number" id="current_price" name="current_price" value=""><br><br>
 
+    <label for="game_mode">Game Mode:</label><br>
+    <select id="game_mode" name="game_mode">
+	    {%for n in modes %}
+	    <option value={{n[0]}}>{{n[1]}}</option>
+	    {% endfor %}
+    </select><br><br>
     <label for="genre">Genre:</label><br>
-    <input type="text" id="genre" name="genre" value=""><br><br>
+    <select id="genre" name="genre">
+	    {% for n in genres %}
+	    <option value={{n}}>{{n}}</option>
+	    {% endfor %}
+    </select><br><br>
 
     <label for="franchise">Franchise:</label><br>
-    <input type="text" id="franchise" name="franchise" value=""><br><br>
+    <select id="franchise" name="franchise">
+	    {% for n in franchises %}
+	    <option value={{n}}>{{n}}</option>
+	    {% endfor %}
+    </select><br><br>
 
     <label for="platform">Platform:</label><br>
-    <input type="text" id="platform" name="platform" value=""><br><br>
+    <select id="platform" name="platform">
+	    {%for n in platforms %}
+	    <option value={{n}}>{{n}}</option>
+	    {% endfor %}
+    </select><br><br>
 
     <label for="dev_leader">Development Leader:</label><br>
-    <input type="text" id="dev_leader" name="dev_leader" value=""><br><br>
+    <select id="dev_leader" name="dev_leader">
+	    {%for n in dev_leaders %}
+	    <option value={{n}}>{{n}}</option>
+	    {% endfor %}
+    </select><br><br>
 
     <label for="developer">Developer:</label><br>
-    <input type="text" id="developer" name="publisher" value=""><br><br>
+    <select id="developer" name="developer">
+	    {% for n in companies %}
+	    <option value={{n[0]}}>{{n[1]}}</option>
+	    {% endfor %}
+    </select><br><br>
+
+    <label for="publisher">Publisher:</label><br>
+    <select id="publisher" name="publisher">
+	    {% for n in companies %}
+	    <option value={{n[0]}}>{{n[1]}}</option>
+	    {% endfor %}
+    </select><br><br>
 
     <label for="desc">Description:</label><br>
     <input type="text" id="desc" name="desc" value=""><br><br>
-
 
     <input type="submit" value="Submit">
   </fieldset>

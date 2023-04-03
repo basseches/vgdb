@@ -176,7 +176,48 @@ def another():
 
 @app.route('/addgame', methods=['GET'])
 def addgame_page():
-        return render_template("addgame.html")
+    #pull in the correct data needed for the dropdown menus
+    mode_query = "select * from game_mode"
+    cursor = g.conn.execute(text(mode_query))
+    mode = []
+    for result in cursor:
+    	mode.append([result[0], result[1]])
+    #genre query
+    genre_query = "select title from genre"
+    cursor = g.conn.execute(text(genre_query))
+    genre = []
+    for result in cursor:
+        genre.append(result[0])
+    #franchise query
+    franchise_query = "select title from franchise"
+    cursor = g.conn.execute(text(franchise_query))
+    franchise  = []
+    for result in cursor:
+        franchise.append(result[0])
+    #platforms query
+    platform_query = "select title from platform"
+    cursor = g.conn.execute(text(platform_query))
+    platform  = []
+    for result in cursor:
+        platform.append(result[0])
+
+    #dev_leaders query
+    devlead_query = "select title from development_leader"
+    cursor = g.conn.execute(text(devlead_query))
+    devlead  = []
+    for result in cursor:
+        devlead.append(result[0])
+    #companies query
+    company_query = "select company_id, title from company"
+    cursor = g.conn.execute(text(company_query))
+    company = []
+    for result in cursor:
+        company.append([result[0],result[1]])
+    #close at the end
+    cursor.close()
+    #send info to template as a dictionary
+    context = dict(modes = mode, platforms = platform, genres = genre, franchises = franchise, dev_leaders = devlead, companies = company)
+    return render_template("addgame.html", **context)
 
 @app.route('/addgame', methods=['POST'])
 def addgame():
@@ -190,7 +231,9 @@ def addgame():
     franchise = request.form['franchise']
     platform = request.form['platform']
     dev_leader = request.form['dev_leader']
-    #developer = request.form['developer']
+    developer = request.form['developer']
+    publisher = request.form['publisher']
+    game_mode = request.form['game_mode']
     
 
     params = {}
@@ -200,18 +243,18 @@ def addgame():
     params["esrb_rating"] = esrb
     params["release_price"] = release_price
     params["current_price"] = current_price
-    #add game_mode here once I've figured out dropdown
     params["genre"] = genre
+    params["game_mode"] = game_mode
     params["franchise"] = franchise
     params["platform"] = platform
     params["dev_leader"] = dev_leader
-    #params["developer"] = developer
-    #params["publisher"] = publisher
+    params["developer"] = developer
+    params["publisher"] = publisher
 
     #push the data to the database
-    ###########################################################
-    #g.conn.execute(text('INSERT INTO game(title,description,po
-
+    g.conn.execute(text('INSERT INTO game(title,description,popularity_rating,esrb_rating, release_price, current_price, genre, franchise, platform, dev_leader, game_mode, developer,publisher) VALUES (:title, :description,:popularity_rating,:esrb_rating,:release_price,:current_price,:genre,:franchise,:platform,:dev_leader,:game_mode,:developer,:publisher)'), params)
+    g.conn.commit();
+    return redirect('/addgame')
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
