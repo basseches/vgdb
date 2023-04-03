@@ -7,10 +7,13 @@
         <div class="row padding">
             <h3>Results:</h3>
         </div>
-        {% for n in data %}
         <div class="break padding"></div>
+        {% if data == null or data == [] %}
+        <h5><i>None</i></h5>
+        {% endif %}
+        {% for n in data %}
         <a href="/game/{{n[0]}}">
-            <div class="result">
+            <div class="qbuttonwide">
                 {% if n[3] == null or n[3] == "" %}
                     <i>{{n[1]}}</i> for {{n[2]}}
                 {% else %}
@@ -18,7 +21,14 @@
                 {% endif %}
             </div>
         </a>
+        <div class="break padding"></div>
         {% endfor %}
+        <div class="break bigpadding"></div>
+        <a href="/query" class="whitetext">
+            <div class="container buttonblue">
+              <i>Query again</i>
+            </div>
+        </a>
     </div>
 </body>
 

@@ -3,16 +3,12 @@
 {% block query %}
 
 <div class="row bigpadding">
-    <h3>You're filtering by platform.</h3>
+    <h3>You're searching by game name.</h3>
 </div>
 <div class="break padding"></div>
 <div class="slider">
     <form method="post">
-        <select id="platform" name="platform">
-            {% for n in data %}
-            <option value='{{n}}'>{{n}}</option>
-            {% endfor %}
-        </select>
+        <input type="text" name="name" placeholder="e.g., 'cuphead'">
         <input type="submit" value="Submit">
     </form>
 </div>
