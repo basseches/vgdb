@@ -7,7 +7,7 @@
         {% for n in data %}
 
         <!-- Title -->
-	<h2><i>{{n[0]}}</i> for <a href="/platform/{{n[9]}}">{{n[9]}}</h2></a>
+	    <h2><i>{{n[0]}}</i> for <a href="/platform/{{n[9]}}">{{n[9]}}</h2></a>
         <div class="bigpadding"></div>
 
         <h4>Description</h4>
@@ -35,18 +35,27 @@
 	<a href="/franchise/{{n[8]}}"><p>{{n[8]}}</p></a>
 
         <h4>Developer</h4>
+        {% if dev == [] %}
+        <p><i>None</i></p>
+        {% endif %}
         {% for d in dev %}
         <a href="/company/{{d[0]}}"><p>{{n[11]}}</p></a>
         {% endfor %}
 
         <h4>Publisher</h4>
+        {% if pub == [] %}
+        <p><i>None</i></p>
+        {% endif %}
         {% for p in pub %}
         <a href="/company/{{p[0]}}"><p>{{n[12]}}</p></a>
         {% endfor %}
 
         <h4>Development leader</h4>
-        <p>{{n[10]}}</p>
-
+        {% if n[10] == None %}
+        <p><i>None</i></p>
+        {% else %}
+        <a href="/dev/{{n[10]}}"><p>{{n[10]}}</p></a>
+        {% endif %}
         <div class="break"></div>
         {% endfor %}
     </div>

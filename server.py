@@ -388,6 +388,45 @@ def year():
     context = dict(data = names)
     return render_template("year.html", **context)
 
+@app.route('/query/developer')
+def query_dev():
+    query = "SELECT DISTINCT c.title FROM company c, game g WHERE " \
+            "c.company_id = g.developer"
+    cursor = g.conn.execute(text(query))
+
+    dev = []
+    for result in cursor:
+        dev.append(result[0])
+    cursor.close()
+    context = dict(data = dev)
+    return render_template("querydev.html", **context)
+
+@app.route('/query/publisher')
+def query_pub():
+    query = "SELECT DISTINCT c.title FROM company c, game g WHERE " \
+            "c.company_id = g.publisher"
+    cursor = g.conn.execute(text(query))
+
+    pub = []
+    for result in cursor:
+        pub.append(result[0])
+    cursor.close()
+    context = dict(data = pub)
+    return render_template("querypub.html", **context)
+
+@app.route('/query/franchise')
+def query_franchise():
+    query = "SELECT DISTINCT f.title FROM franchise f, game g WHERE " \
+            "f.title = g.franchise"
+    cursor = g.conn.execute(text(query))
+
+    franchise = []
+    for result in cursor:
+        franchise.append(result[0])
+    cursor.close()
+    context = dict(data = franchise)
+    return render_template("queryfranchise.html", **context)
+
 @app.route('/query/game')
 def query_game():
     return render_template("querygame.html")
@@ -491,6 +530,63 @@ def game_post():
     names = []
     for result in cursor:
         names.append([result[0], result[1], result[2]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+
+@app.route('/query/developer', methods=['POST'])
+def dev_post():
+    # accessing form inputs from user
+    params = {}
+    params["developer"] = request.form['dev']
+
+    query = "SELECT g.game_id, g.title, g.platform, c.title FROM game g, " \
+            "company c WHERE g.developer = c.company_id " \
+            "AND c.title = :developer"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], "Developed by " + result[3]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+
+@app.route('/query/publisher', methods=['POST'])
+def pub_post():
+    # accessing form inputs from user
+    params = {}
+    params["publisher"] = request.form['pub']
+
+    query = "SELECT g.game_id, g.title, g.platform, c.title FROM game g, " \
+            "company c WHERE g.publisher = c.company_id " \
+            "AND c.title = :publisher"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], "Published by " + result[3]])
+    cursor.close()
+    context = dict(data = names)
+
+    return render_template("results.html", **context)
+
+@app.route('/query/franchise', methods=['POST'])
+def franchise_post():
+    # accessing form inputs from user
+    params = {}
+    params["franchise"] = request.form['franchise']
+
+    query = "SELECT g.game_id, g.title, g.platform, f.title FROM game g, " \
+            "franchise f WHERE g.franchise = f.title " \
+            "AND f.title = :franchise"
+    cursor = g.conn.execute(text(query), params)
+
+    names = []
+    for result in cursor:
+        names.append([result[0], result[1], result[2], result[3]])
     cursor.close()
     context = dict(data = names)
 
@@ -718,6 +814,35 @@ def company(company = None):
 
     context = dict(data = names, devs = devs, pubs = pubs)
     return render_template("company.html", **context)
+
+#---------------------------------------------------------------------
+
+@app.route('/dev/<dev>')
+def dev(dev = None):
+    if dev == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["dev"] = dev
+    query = "SELECT title, job FROM development_leader WHERE title = :dev"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append([thing for thing in result])
+
+    dev_query = "SELECT game.game_id, game.title, game.platform FROM game, development_leader " \
+            "WHERE development_leader.title = :dev AND game.dev_leader = development_leader.title"
+    cursor = g.conn.execute(text(dev_query), params)
+    devs = []
+    for result in cursor:
+        devs.append([thing for thing in result])
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names, devs = devs)
+    return render_template("devleader.html", **context)
 
 @app.route('/login')
 def login():
