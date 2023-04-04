@@ -1,0 +1,23 @@
+{% extends "nav.html" %}
+
+{% block content %}
+
+<body>
+    <div class="cont2">
+        {% for n in data %}
+
+        <!-- Name -->
+        <h2><i>{{n[0]}}</i></h2>
+        <div class="padding"></div>
+
+        <h4>Type</h4>
+        <p>{{n[1]}}</p>
+
+        <h4>Release date</h4>
+        <p>{{n[2]}}</p>
+
+        {% endfor %}
+    </div>
+</body>
+
+{% endblock %}

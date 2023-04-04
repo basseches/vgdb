@@ -7,23 +7,21 @@
         {% for n in data %}
 
         <!-- Name -->
-        <h2><i>{{n[0]}}</i></h2>
-        <div class="bigpadding"></div>
+        <h2><i>Product family: {{n[0]}}</i></h2>
+        <div class="padding"></div>
 
-        <h4>Job</h4>
-        <p>{{n[1]}}</p>
-
-        {% endfor %}
-        <h4>Developed</h4>
+        <h4>Platforms</h4>
         <div class="break"></div>
-        {% for n in devs %}
+        {% for n in platforms %}
         <div class="row padding">
-            <a class="noul" href="/game/{{n[0]}}">
+            <a class="noul" href="/platform/{{n[0]}}">
               <div class="qbutton">
-                <i>{{n[1]}}</i> for {{n[2]}}
+                <i>{{n[0]}}</i>
               </div>
             </a>
         </div>
+        {% endfor %}
+
         {% endfor %}
     </div>
 </body>

@@ -631,9 +631,34 @@ def all_post(search=None):
     for result in cursor:
         platforms.append([result[0]])
 
+    query = "SELECT f.title FROM franchise f " \
+            "WHERE LOWER(f.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    franchises = []
+    for result in cursor:
+        franchises.append([result[0]])
+
+    query = "SELECT d.title FROM development_leader d " \
+            "WHERE LOWER(d.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    dev = []
+    for result in cursor:
+        dev.append([result[0]])
+
+    query = "SELECT s.title FROM spinoff s " \
+            "WHERE LOWER(s.title) LIKE :search"
+    cursor = g.conn.execute(text(query), params)
+
+    spinoffs = []
+    for result in cursor:
+        spinoffs.append([result[0]])
+
     cursor.close()
     context = dict(games = games, genres = genres, companies = companies,
-                        platforms = platforms)
+                        platforms = platforms, franchises = franchises,
+                        dev = dev, spinoffs = spinoffs)
 
     return render_template("allresults.html", **context)
 
@@ -760,9 +785,7 @@ def franchise(franchise = None):
     names = []
     for result in cursor:
         names.append(result)
-    print(names)
     params["spinoff"] = names[0][1]
-    print(names[0][1])
 
     spinoff_query = "SELECT *  FROM spinoff where title = :spinoff"
     cursor = g.conn.execute(text(spinoff_query), params)
@@ -843,6 +866,59 @@ def dev(dev = None):
 
     context = dict(data = names, devs = devs)
     return render_template("devleader.html", **context)
+
+#---------------------------------------------------------------------
+
+@app.route('/spinoff/<spinoff>')
+def spinoff(spinoff = None):
+    if spinoff == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["spinoff"] = spinoff
+    query = "SELECT title, type, release_year FROM spinoff WHERE title = :spinoff"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append([thing for thing in result])
+
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names)
+    return render_template("spinoff.html", **context)
+
+#---------------------------------------------------------------------
+
+@app.route('/family/<prodfamily>')
+def prodfamily(prodfamily = None):
+    if prodfamily == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["prodfamily"] = prodfamily
+    query = "SELECT title FROM product_family WHERE title = :prodfamily"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append([thing for thing in result])
+
+    query = "SELECT platform.title FROM platform, product_family " \
+            "WHERE product_family.title = :prodfamily AND " \
+            "product_family.title = platform.product_family"
+    cursor = g.conn.execute(text(query), params)
+    platforms = []
+    for result in cursor:
+        platforms.append([thing for thing in result])
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names, platforms = platforms)
+    return render_template("prodfamily.html", **context)
 
 @app.route('/login')
 def login():

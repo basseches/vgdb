@@ -32,7 +32,11 @@
         <a href="/genre/{{n[7]}}"><p>{{n[7]}}</p></a>
 
         <h4>Franchise</h4>
-	<a href="/franchise/{{n[8]}}"><p>{{n[8]}}</p></a>
+        {% if n[8] == None %}
+        <p><i>None</i></p>
+        {% else %}
+        <a href="/franchise/{{n[8]}}"><p>{{n[8]}}</p></a>
+        {% endif %}
 
         <h4>Developer</h4>
         {% if dev == [] %}

@@ -4,24 +4,30 @@
 
 <body>
     <div class="cont2">
-        {% for n in data %}
+    {% for n in data %}
 
-        <!-- Title -->
-	<h2>Franchise: <i>{{n[0]}}</i></h2>
-        <div class="bigpadding"></div>
+		<!-- Title -->
+		<h2>Franchise: <i>{{n[0]}}</i></h2>
+		<div class="bigpadding"></div>
 
-	<h3>Spinoff: <i>{{n[1]}}</i></h3>
-        <div class="bigpadding"></div>
+		<h3>
+			Spinoff:
+			{% if n[1] == None %}
+        	<i>None</i>
+        	{% else %}
+			<a href="/spinoff/{{n[1]}}"><i>{{n[1]}}</i></a>
+			{% endif %}
+		</h3>
+		<div class="bigpadding"></div>
 
 	{% endfor %}
 
-        <h4>Spinoff Details</h4>
+    <h4>Spinoff Details</h4>
 	{% for n in spinoff %}
-
-	<p>Title: {{n[0]}}</p>
-	<p>Type: {{n[1]}}</p>
-	<p>Release Year: {{n[2]}} </p>
-	<div>
+		<p>Title: {{n[0]}}</p>
+		<p>Type: {{n[1]}}</p>
+		<p>Release Year: {{n[2]}} </p>
+		<div>
 	{% endfor %}
 
    </div>

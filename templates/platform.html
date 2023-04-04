@@ -8,11 +8,15 @@
 
         <!-- Title -->
 	<h2>Platform: <i>{{n[0]}}</i></h2>
+        <div class="padding"></div>
+
+        <h3>Product family: <a href="/family/{{n[4]}}"><i>{{n[4]}}</i></a></h3>
         <div class="bigpadding"></div>
 
-	<h3>Release Price: <i>${{n[2]}}</i></h3>
-        <div class="bigpadding"></div>
-	<h3>Platform Family: <i>{{n[3]}}</i></h3>
+	<h4>Release price: <i>${{n[2]}}</i></h4>
+        <div class="padding"></div>
+
+	<h4>Platform type: <i>{{n[3]}}</i></h4>
         <div class="bigpadding"></div>
 
         <h4>Description</h4>
@@ -25,7 +29,7 @@
         <div class="break"></div>
         {% for n in games %}
         <div class="row padding">
-            <a href="/game/{{n[0]}}">
+            <a class="noul" href="/game/{{n[0]}}">
               <div class="qbutton">
                 <i>{{n[1]}}</i> for {{n[2]}}
               </div>

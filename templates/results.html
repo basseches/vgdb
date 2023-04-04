@@ -12,7 +12,7 @@
         <h5><i>None</i></h5>
         {% endif %}
         {% for n in data %}
-        <a href="/game/{{n[0]}}">
+        <a class="noul" href="/game/{{n[0]}}">
             <div class="qbuttonwide">
                 {% if n[3] == null or n[3] == "" %}
                     <i>{{n[1]}}</i> for {{n[2]}}
@@ -24,7 +24,7 @@
         <div class="break padding"></div>
         {% endfor %}
         <div class="break bigpadding"></div>
-        <a href="/query" class="whitetext">
+        <a class="noul" href="/query" class="whitetext">
             <div class="container buttonblue">
               <i>Query again</i>
             </div>

@@ -7,7 +7,7 @@
   <div class="break"></div>
   {% for n in data %}
     <div class="row padding">
-      <a href="/game/{{n[3]}}">
+      <a class="noul" href="/game/{{n[3]}}">
         <div class="qbutton">
           #{{n[2]}}: <i>{{n[0]}}</i>
           <br>Player rating of {{n[1]}}/10
@@ -18,7 +18,7 @@
   {% endfor %}
   or
   <div class="padding break"></div>
-  <a href="query" class="whitetext">
+  <a class="noul" href="query" class="whitetext">
     <div class="buttonblue">
       <i>Find your new favorite game!</i>
     </div>

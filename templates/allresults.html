@@ -14,7 +14,7 @@
         <p><i>None</i></p>
         {% endif %}
         {% for n in games %}
-        <a href="/game/{{n[0]}}">
+        <a class="noul" href="/game/{{n[0]}}">
             <div class="qbuttonwide">
                 {% if n[3] == null or n[3] == "" %}
                     <i>{{n[1]}}</i> for {{n[2]}}
@@ -33,7 +33,7 @@
         <p><i>None</i></p>
         {% endif %}
         {% for n in genres %}
-        <a href="/genre/{{n[0]}}">
+        <a class="noul" href="/genre/{{n[0]}}">
             <div class="qbuttonwide">
                  <i>{{n[0]}}</i>
             </div>
@@ -48,7 +48,7 @@
         <p><i>None</i></p>
         {% endif %}
         {% for n in companies %}
-        <a href="/company/{{n[0]}}">
+        <a class="noul" href="/company/{{n[0]}}">
             <div class="qbuttonwide">
                 <i>{{n[1]}}</i>
             </div>
@@ -63,7 +63,52 @@
         <p><i>None</i></p>
         {% endif %}
         {% for n in platforms %}
-        <a href="/platform/{{n[0]}}">
+        <a class="noul" href="/platform/{{n[0]}}">
+            <div class="qbuttonwide">
+                <i>{{n[0]}}</i>
+            </div>
+        </a>
+        <div class="break padding"></div>
+        {% endfor %}
+        <div class="break bigpadding"></div>
+
+        <h5><i>Franchise results:</i></h5>
+        <div class="break padding"></div>
+        {% if franchises == [] %}
+        <p><i>None</i></p>
+        {% endif %}
+        {% for n in franchises %}
+        <a class="noul" href="/franchise/{{n[0]}}">
+            <div class="qbuttonwide">
+                <i>{{n[0]}}</i>
+            </div>
+        </a>
+        <div class="break padding"></div>
+        {% endfor %}
+        <div class="break bigpadding"></div>
+
+        <h5><i>Development leader results:</i></h5>
+        <div class="break padding"></div>
+        {% if dev == [] %}
+        <p><i>None</i></p>
+        {% endif %}
+        {% for n in dev %}
+        <a class="noul" href="/dev/{{n[0]}}">
+            <div class="qbuttonwide">
+                <i>{{n[0]}}</i>
+            </div>
+        </a>
+        <div class="break padding"></div>
+        {% endfor %}
+        <div class="break bigpadding"></div>
+
+        <h5><i>Spinoff results:</i></h5>
+        <div class="break padding"></div>
+        {% if spinoffs == [] %}
+        <p><i>None</i></p>
+        {% endif %}
+        {% for n in spinoffs %}
+        <a class="noul" href="/spinoff/{{n[0]}}">
             <div class="qbuttonwide">
                 <i>{{n[0]}}</i>
             </div>

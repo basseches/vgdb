@@ -40,6 +40,7 @@ body {
     border-width: 0px;
     background-color: rgb(241, 241, 241);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .qbuttonwide{
@@ -49,6 +50,7 @@ body {
     border-width: 0px;
     background-color: rgb(241, 241, 241);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .buttonblue{
@@ -59,6 +61,7 @@ body {
     background-color: #2c32ec;
     color: white;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .bluebox{
@@ -70,6 +73,7 @@ body {
     position: -webkit-sticky;
     position: sticky;
     top: 30px;
+    text-decoration: none;
 }
 
 .result{
@@ -131,6 +135,11 @@ body {
 
 a {
     color: black;
+    text-decoration: underline;
+}
+
+.noul {
+    text-decoration: none;
 }
 
 .whitetext {
