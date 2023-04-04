@@ -1,0 +1,19 @@
+{% extends "query.html" %}
+
+{% block query %}
+
+<div class="row bigpadding">
+    <h3>You're filtering by developer.</h3>
+</div>
+<div class="break padding"></div>
+<div class="slider">
+    <form method="post">
+        <select id="dev" name="dev">
+            {% for n in data %}
+            <option value='{{n}}'>{{n}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+{% endblock %}
