@@ -251,7 +251,7 @@ def addcompanyDB():
     g.conn.execute(text('INSERT INTO company(title,country) VALUES (:company,:country)'),params)
     g.conn.commit()
     return redirect('/addcompany')
-#adding a franchise
+#adding a franchise------------------------------------------------------------------------------
 @app.route('/addfranchise', methods=['GET'])
 def addfranchise_page():
     return render_template('addfranchise.html')
@@ -269,9 +269,10 @@ def addfranchise():
     params["type"] = spinoff_type
     params["release_year"] = spinoff_year
 
+
     g.conn.execute(text('INSERT INTO spinoff(title,type,release_year) VALUES (:title,:type,:release_year)'),params)
     g.conn.commit()
-
+    #----------------------------------------------------come back here for insert issue page additon -----------
     #now handle franchise work
     franchise = request.form['franchise']
     spinoff = request.form['spinoff']
@@ -649,6 +650,37 @@ def platform(platform = None):
 
     context = dict(data = names, games = games, count = count)
     return render_template("platform.html", **context)
+#--------------------------------------------------------------------
+
+@app.route('/franchise/<franchise>')
+def franchise(franchise = None):
+    if franchise == None:
+        return render_template("notfound.html")
+
+    params = {}
+    params["franchise"] = franchise 
+    query = "select * from franchise as p where p.title = :franchise"
+    cursor = g.conn.execute(text(query), params)
+    names = []
+    for result in cursor:
+        names.append(result)
+    print(names)
+    params["spinoff"] = names[0][1]
+    print(names[0][1])
+
+    spinoff_query = "SELECT *  FROM spinoff where title = :spinoff"
+    cursor = g.conn.execute(text(spinoff_query), params)
+    spinoff_info = []
+    for result in cursor:
+        spinoff_info.append([thing for thing in result])
+
+    cursor.close()
+
+    if not names:
+        return render_template("notfound.html")
+
+    context = dict(data = names, spinoff = spinoff_info)
+    return render_template("franchise.html", **context)
 
 #---------------------------------------------------------------------
 

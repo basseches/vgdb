@@ -1,0 +1,30 @@
+{% extends "nav.html" %}
+
+{% block content %}
+
+<body>
+    <div class="cont2">
+        {% for n in data %}
+
+        <!-- Title -->
+	<h2>Franchise: <i>{{n[0]}}</i></h2>
+        <div class="bigpadding"></div>
+
+	<h3>Spinoff: <i>{{n[1]}}</i></h3>
+        <div class="bigpadding"></div>
+
+	{% endfor %}
+
+        <h4>Spinoff Details</h4>
+	{% for n in spinoff %}
+
+	<p>Title: {{n[0]}}</p>
+	<p>Type: {{n[1]}}</p>
+	<p>Release Year: {{n[2]}} </p>
+	<div>
+	{% endfor %}
+
+   </div>
+</body>
+
+{% endblock %}
