@@ -313,13 +313,12 @@ def games_post():
     query = ""
     prefix = ""
     suffix = ""
-    button = int(request.form['sort'])
+    try:
+        button = int(request.form['sort'])
+    except:
+        button = 1
 
-    if button == 1:
-        query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating DESC"
-        prefix = "Rating of "
-        suffix = "/10"
-    elif button == 2:
+    if button == 2:
         query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating ASC"
         prefix = "Rating of "
         suffix = "/10"
@@ -329,6 +328,10 @@ def games_post():
     elif button == 4:
         query = "SELECT game_id, title, platform, TO_CHAR(current_price, '$FM999999990.00') FROM game ORDER BY current_price ASC"
         prefix = "Current price: "
+    else:
+        query = "SELECT game_id, title, platform, popularity_rating FROM game ORDER BY popularity_rating DESC"
+        prefix = "Rating of "
+        suffix = "/10"
     cursor = g.conn.execute(text(query))
 
     names = []
